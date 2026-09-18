@@ -46,3 +46,14 @@ BuildProfile.ets
 Thumbs.db
 
 # Keep oh-package-lock.json5 tracked for reproducible dependency versions.
+
+# Local cross-platform SDKs and build outputs
+.migration-tools/
+.gradle/
+*.apk
+*.aab
+*.ipa
+Pods/
+DerivedData/
+*.xcuserstate
+xcuserdata/
