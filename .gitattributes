@@ -1,0 +1,19 @@
+# Normalize text in Git; keep consistent line endings across contributors.
+* text=auto eol=lf
+*.ets text eol=lf
+*.ts text eol=lf
+*.json text eol=lf
+*.json5 text eol=lf
+*.md text eol=lf
+*.svg text eol=lf
+*.html text eol=lf
+*.htm text eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary

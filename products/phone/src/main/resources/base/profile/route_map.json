@@ -1,0 +1,76 @@
+{
+  "routerMap": [
+    {
+      "name": "IndexPage",
+      "pageSourceFile": "src/main/ets/pages/IndexPage.ets",
+      "buildFunction": "IndexPageBuilder"
+    },
+    {
+      "name": "SafePage",
+      "pageSourceFile": "src/main/ets/pages/SafePage.ets",
+      "buildFunction": "SafePageBuilder"
+    },
+    {
+      "name": "ChatHistoryPage",
+      "pageSourceFile": "src/main/ets/pages/chat/ChatHistoryPage.ets",
+      "buildFunction": "ChatHistoryPageBuilder"
+    },
+    {
+      "name": "ModelSettingsPage",
+      "pageSourceFile": "src/main/ets/pages/settings/ModelSettingsPage.ets",
+      "buildFunction": "ModelSettingsPageBuilder"
+    },
+    {
+      "name": "CharacterSettingsPage",
+      "pageSourceFile": "src/main/ets/pages/character/CharacterSettingsPage.ets",
+      "buildFunction": "CharacterSettingsPageBuilder"
+    },
+    {
+      "name": "AvatarCropPage",
+      "pageSourceFile": "src/main/ets/pages/character/AvatarCropPage.ets",
+      "buildFunction": "AvatarCropPageBuilder"
+    },
+    {
+      "name": "AISummaryPage",
+      "pageSourceFile": "src/main/ets/pages/office/AISummaryPage.ets",
+      "buildFunction": "AISummaryPageBuilder"
+    },
+    {
+      "name": "PaperWritingPage",
+      "pageSourceFile": "src/main/ets/pages/office/PaperWritingPage.ets",
+      "buildFunction": "PaperWritingPageBuilder"
+    },
+    {
+      "name": "OfficeHistoryPage",
+      "pageSourceFile": "src/main/ets/pages/office/OfficeHistoryPage.ets",
+      "buildFunction": "OfficeHistoryPageBuilder"
+    },
+    {
+      "name": "OfficeResultPage",
+      "pageSourceFile": "src/main/ets/pages/office/OfficeResultPage.ets",
+      "buildFunction": "OfficeResultPageBuilder"
+    },
+    {
+      "name": "PrivacyPage",
+      "pageSourceFile": "src/main/ets/pages/PrivacyPage.ets",
+      "buildFunction": "PrivacyPageBuilder"
+    },
+    {
+      "name": "AgreePrivacyPage",
+      "pageSourceFile": "src/main/ets/pages/AgreeDialogPage.ets",
+      "buildFunction": "AgreePrivacyPageBuilder"
+    },
+    {
+      "name": "SplashPage",
+      "pageSourceFile": "src/main/ets/pages/SplashPage.ets",
+      "buildFunction": "SplashPageBuilder"
+    },
+    {
+      "name": "AronaChatPage",
+      "pageSourceFile": "src/main/ets/pages/chat/Character/Arona.ets",
+      "buildFunction": "AronaChatPageBuilder"
+    }
+
+
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "app": {
+    "signingConfigs": [],
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "default",
+        "targetSdkVersion": "5.0.5(17)",
+        "compatibleSdkVersion": "5.0.5(17)",
+        "runtimeOS": "HarmonyOS",
+        "buildOption": {
+          "strictMode": {
+            "caseSensitiveCheck": true,
+            "useNormalizedOHMUrl": true
+          }
+        }
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug"
+      },
+      {
+        "name": "release"
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "phone",
+      "srcPath": "./products/phone",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "business_mine",
+      "srcPath": "./components/business_mine"
+    },
+    {
+      "name": "business_setting",
+      "srcPath": "./components/business_setting"
+    },
+    {
+      "name": "lib_account",
+      "srcPath": "./components/lib_account"
+    },
+    {
+      "name": "lib_common",
+      "srcPath": "./components/lib_common"
+    },
+    {
+      "name": "lib_widget",
+      "srcPath": "./components/lib_widget"
+    },
+    {
+      "name": "lib_api",
+      "srcPath": "./components/lib_api"
+    },
+    {
+      "name": "module_feedback",
+      "srcPath": "./components/module_feedback"
+    },
+    {
+      "name": "module_imagepreview",
+      "srcPath": "./components/module_imagepreview"
+    }
+  ]
+}
