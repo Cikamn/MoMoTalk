@@ -16,7 +16,7 @@ No new product features. No destructive Git operations. Preserve preference name
 - [x] Generate native hosts and configure cross-platform build using the official toolchain; keep SDK paths and signing material local.
 - [x] Adapt incompatible calls while preserving their behavior. Test new adapter logic for platform routing/error behavior before using it.
 - [x] Compile and test HarmonyOS and Android; validate existing user flows on available simulators. Do not generate an iOS host.
-- [ ] Update project/build documentation and review the full diff and secret scan. Commit and push the migration branch; integrate only verified work, preserving the original baseline.
+- [x] Update project/build documentation and review the full diff and secret scan. Commit and push the migration branch; integrate only verified work, preserving the original baseline.
 
 
-2026-09-21: implementation uses Android overlays and native host under platforms/android, generated build/arkuix, strict cross-platform checking, API24 SDK. API28 emulator verified actual user flows. Final review and GitHub integration remain before the last checkbox can be marked.
+2026-09-21: implementation uses Android overlays and native host under platforms/android, generated build/arkuix, strict cross-platform checking, API24 SDK. API28 emulator verified actual user flows. Review and credential-pattern checks passed. Implementation commit 04972a1 was pushed to codex/arkuix-migration and fast-forwarded into local and remote develop. main and baseline-2026-09-18 remain at the original presentation baseline.
