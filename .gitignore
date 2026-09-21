@@ -57,3 +57,6 @@ Pods/
 DerivedData/
 *.xcuserstate
 xcuserdata/
+
+# Local execution notes
+.superpowers/

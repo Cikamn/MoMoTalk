@@ -1,0 +1,48 @@
+plugins { id 'com.android.application' }
+android {
+    namespace 'com.cikamn.momotalk'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'com.cikamn.momotalk'
+        minSdk 26
+        targetSdk 35
+        versionCode 1000000
+        versionName '1.0.0'
+        ndk { abiFilters 'arm64-v8a', 'x86_64' }
+    }
+    buildTypes {
+        release { minifyEnabled false }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    sourceSets { main { jniLibs.srcDirs = ['libs'] } }
+    packaging { jniLibs { useLegacyPackaging true } }
+}
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar', '*.aar'])
+    implementation 'androidx.core:core:1.8.0'
+    implementation 'androidx.window:window-java:1.0.0'
+}
+
+
+// Hvigor also emits the Harmony test module. Keep test assets out of the APK:
+// its entry_test route table otherwise prevents the real phone routes loading.
+def filteredAssets = layout.buildDirectory.dir('filteredArkuiAssets')
+tasks.register('prepareArkuiAssets', Sync) {
+    from('src/main/assets') { exclude 'arkui-x/phoneTest/**' }
+    into(filteredAssets)
+}
+android.sourceSets.main.assets.setSrcDirs([filteredAssets])
+tasks.named('preBuild') { dependsOn 'prepareArkuiAssets' }
+
+tasks.register('prepareArkuiRuntime', Exec) {
+    doFirst {
+        def sdk = System.getenv('MOMOTALK_ARKUIX_SDK')
+        if (!sdk) throw new GradleException('Run scripts/build-android.ps1 to configure the ArkUI-X SDK')
+        commandLine(System.getenv('MOMOTALK_NODE') ?: 'node',
+            rootProject.file('tools/stage-native.cjs').absolutePath, sdk)
+    }
+}
+tasks.named('preBuild') { dependsOn 'prepareArkuiRuntime' }

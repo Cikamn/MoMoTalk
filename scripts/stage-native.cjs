@@ -1,0 +1,14 @@
+const path = require('node:path');
+const fs = require('node:fs');
+const JSON5 = require('json5');
+const {stageEmulatorLibraries} = require('./stage-emulator-libs.cjs');
+const {stageRuntimeLibraries} = require('./stage-runtime-libs.cjs');
+const sdk = process.argv[2];
+if (!sdk || !fs.existsSync(path.join(sdk,'arkui-x.json'))) throw new Error('Set MOMOTALK_ARKUIX_SDK to the ArkUI-X SDK 24/arkui-x directory');
+const metadata = JSON5.parse(fs.readFileSync(path.join(sdk,'arkui-x.json'),'utf8'));
+if (metadata.version !== '6.1.1.100') throw new Error('Expected ArkUI-X 6.1.1.100, got '+metadata.version);
+const host = path.resolve(__dirname,'..');
+const libs = path.join(host,'app/libs');
+const modules = JSON5.parse(fs.readFileSync(path.join(__dirname,'runtime-modules.json'),'utf8'));
+stageRuntimeLibraries(sdk,libs,modules);
+stageEmulatorLibraries(sdk,libs);

@@ -1,0 +1,11 @@
+{
+  "name": "momotalk-build-tools",
+  "private": true,
+  "scripts": {
+    "test": "node --test scripts/tests",
+    "prepare:android": "node scripts/prepare-android.cjs"
+  },
+  "devDependencies": {
+    "json5": "2.2.3"
+  }
+}

@@ -1,0 +1,7 @@
+[
+  "ohos.mediaquery",
+  "ohos.file.hash",
+  "ohos.security.cryptoFramework",
+  "ohos.security.cert",
+  "ohos.data.relationalStore"
+]
