@@ -73,3 +73,17 @@ test('changing the endpoint clears its credential before model lookup or saving'
   assert.equal(config.apiKey, '');
   assert.equal(config.baseUrl, 'https://example.invalid/v1');
 });
+
+test('local configuration supplies the endpoint, provider, model and credential together', () => {
+  const config = load('', JSON.stringify({provider: 'custom', baseUrl: ' https://example.invalid/v1/ ', model: ' local-model ', apiKey: ' local-fixture '}));
+  assert.equal(config.provider, 'custom');
+  assert.equal(config.baseUrl, 'https://example.invalid/v1');
+  assert.equal(config.model, 'local-model');
+  assert.equal(config.apiKey, 'local-fixture');
+});
+
+test('invalid local connection fields do not activate a credential', () => {
+  for (const fields of [{baseUrl: 'http://example.invalid'}, {baseUrl: ''}, {baseUrl: 42}, {model: ''}, {model: 42}, {provider: ''}]) {
+    assert.equal(load('', JSON.stringify({...fields, apiKey: 'local-fixture'})).apiKey, '');
+  }
+});

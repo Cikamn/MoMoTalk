@@ -12,6 +12,9 @@ const CONFIG_KEY: string = 'config';
 const LOCAL_DEFAULTS_FILE: string = 'ai_defaults.local.json';
 
 interface LocalAIDefaults {
+  provider?: string;
+  baseUrl?: string;
+  model?: string;
   apiKey: string;
 }
 
@@ -70,6 +73,25 @@ export class AIConfigStore {
       const decoder = util.TextDecoder.create('utf-8', { ignoreBOM: true });
       const local = JSON.parse(decoder.decodeToString(bytes, { stream: false })) as LocalAIDefaults;
       if (local && typeof local.apiKey === 'string') {
+        if (local.provider !== undefined) {
+          if (typeof local.provider !== 'string' || !local.provider.trim()) {
+            return new AIConfig();
+          }
+          config.provider = local.provider.trim();
+        }
+        if (local.baseUrl !== undefined) {
+          if (typeof local.baseUrl !== 'string' ||
+            !/^https:\/\/[a-zA-Z0-9.-]+(?::[0-9]+)?(?:\/[^\s?#]*)?$/.test(local.baseUrl.trim())) {
+            return new AIConfig();
+          }
+          config.baseUrl = local.baseUrl.trim().replace(/\/$/, '');
+        }
+        if (local.model !== undefined) {
+          if (typeof local.model !== 'string' || !local.model.trim()) {
+            return new AIConfig();
+          }
+          config.model = local.model.trim();
+        }
         config.apiKey = local.apiKey.trim();
       }
     } catch (_) {

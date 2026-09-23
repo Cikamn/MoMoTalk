@@ -8,11 +8,16 @@
 
 ```json
 {
+  "provider": "deepseek",
+  "baseUrl": "https://api.deepseek.com",
+  "model": "deepseek-v4-flash",
   "apiKey": "填入你自己的开发密钥"
 }
 ```
 
-此文件已被 Git 忽略，不会上传 GitHub。接口固定为 `https://api.deepseek.com`，沿用项目的 `deepseek-v4-flash` 模型别名。不从这个文件接收任意接口地址。缺失或损坏时仍可打开应用，使用右上角配置功能。
+此文件集中保存服务商、HTTPS 接口地址、模型名称和密钥，已被 Git 忽略，不会上传 GitHub。无密钥的示例见 [ai_defaults.example.json](examples/ai_defaults.example.json)。旧版只填写 apiKey 的文件仍兼容，其他字段默认使用 DeepSeek；填写的字段必须有效，缺失或损坏时仍可打开应用，使用右上角配置功能。
+
+这是本机明文配置文件，不是加密保险箱；请勿截图、分享或强制加入 Git。它会进入开发安装包，只放 App 当前需要的 AI 接口凭据，不要把数据库密码、服务器管理凭据等其他秘密放进这里。修改后需要重新构建、安装，并重启应用；若右上角已经保存了完整自定义配置，该配置仍然优先。
 
 在 DevEco Studio 构建鸿蒙包，或运行 Android 构建脚本时，此资源会被包含进本机安装包。不同 worktree 的本地文件不会由 Git 同步，需要单独准备。仅在内存中使用默认配置，不自动将密钥写入应用偏好设置；用户在配置页主动保存则沿用原有的本机保存流程。
 
