@@ -14,6 +14,7 @@ export struct ChatPage {
   @Local controller?: CopilotController;
   @Local isConfigured: boolean = false;
   @Local assistantName: string = 'AI 助手';
+  @Local draft: string = '';
   private activeProfile: CharacterProfile = new CharacterProfile();
   private configChangedCallback: () => void = () => {
     this.reloadConfig();
@@ -42,7 +43,7 @@ export struct ChatPage {
   build() {
     Column() {
       NavHeaderBar({
-        title: this.assistantName,
+        title: '什亭之箱',
         isSubTitle: false,
         showBackBtn: false,
         rightPartBuilder: () => {
@@ -71,24 +72,48 @@ export struct ChatPage {
           }
         }).layoutWeight(1)
       } else {
-        Column({ space: 16 }) {
-          Text('尚未配置模型')
-            .fontSize($r('sys.float.Title_M'))
-            .fontWeight(FontWeight.Bold)
-            .fontColor($r('sys.color.font_primary'))
-          Text('请选择 DeepSeek、Kimi 或自定义兼容接口，并填写自己的 API Key。')
-            .fontSize($r('sys.float.Body_M'))
-            .fontColor($r('sys.color.font_secondary'))
-            .textAlign(TextAlign.Center)
-          Button('前往模型设置')
-            .onClick(() => {
-              RouterUtils.pushPathByName(RouterMap.MODEL_SETTINGS_PAGE);
-            })
+        Column() {
+          Column({ space: 12 }) {
+            Image(this.activeProfile.id === 'arona' ? $r('app.media.arona_avatar_circle') :
+              $r('app.media.icon_foreground'))
+              .width(64)
+              .height(64)
+              .borderRadius(32)
+            Text(`你好，我是${this.assistantName}`)
+              .fontSize($r('sys.float.Title_M'))
+              .fontWeight(FontWeight.Medium)
+              .fontColor($r('sys.color.font_primary'))
+            Text('今天想聊些什么？')
+              .fontSize($r('sys.float.Body_M'))
+              .fontColor($r('sys.color.font_secondary'))
+          }
+          .layoutWeight(1)
+          .width('100%')
+          .justifyContent(FlexAlign.Center)
+
+          Row({ space: 8 }) {
+            TextArea({ placeholder: '请输入你的问题', text: $$this.draft })
+              .layoutWeight(1)
+              .height(56)
+              .maxLength(4000)
+              .fontSize($r('sys.float.Body_M'))
+              .fontColor($r('sys.color.font_primary'))
+              .backgroundColor($r('sys.color.comp_background_tertiary'))
+              .borderRadius(20)
+            Button('发送')
+              .height(40)
+              .enabled(this.draft.trim().length > 0)
+              .onClick(() => {
+                this.getUIContext().getPromptAction().showToast({
+                  message: '对话服务尚未就绪，请稍后再试。'
+                });
+              })
+          }
+          .width('100%')
+          .padding({ left: 16, right: 16, top: 8, bottom: 12 })
         }
         .layoutWeight(1)
         .width('100%')
-        .justifyContent(FlexAlign.Center)
-        .padding({ left: 32, right: 32 })
       }
     }
     .justifyContent(FlexAlign.SpaceBetween)
@@ -113,18 +138,11 @@ export struct ChatPage {
     Row({ space: 16 }) {
       Button('配置')
         .height(36)
+        .fontColor($r('sys.color.font_secondary'))
+        .backgroundColor($r('sys.color.comp_background_tertiary'))
         .fontSize($r('sys.float.Body_M'))
         .onClick(() => {
           RouterUtils.pushPathByName(RouterMap.MODEL_SETTINGS_PAGE);
-        })
-      SymbolGlyph($r('sys.symbol.message_badge_plus_fill'))
-        .fontSize($r('sys.float.Title_M'))
-        .fontColor([$r('sys.color.icon_primary')])
-        .padding(8)
-        .borderRadius(40)
-        .backgroundColor($r('sys.color.comp_background_tertiary'))
-        .onClick(() => {
-          this.controller?.reset();
         })
       HistoryButton({
         onEvent: () => {
