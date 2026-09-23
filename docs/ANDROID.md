@@ -63,6 +63,7 @@ adb -s 你的设备ID shell am start -n com.cikamn.momotalk/.PhoneEntryAbilityAc
 ## 自动化检查
 
 ```powershell
+$env:DEVECO_STUDIO_HOME = '你的 DevEco Studio 安装目录'
 npm ci --ignore-scripts
 npm test
 ```

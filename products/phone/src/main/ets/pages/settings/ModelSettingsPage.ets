@@ -53,13 +53,17 @@ struct ModelSettingsPage {
                 .fontSize($r('sys.float.Body_L'))
                 .fontWeight(FontWeight.Medium)
                 .fontColor($r('sys.color.font_primary'))
-              TextInput({ placeholder: '例如 https://api.example.com/v1', text: $$this.baseUrl })
+              TextInput({ placeholder: '例如 https://api.example.com/v1', text: this.baseUrl })
                 .height(48)
                 .fontSize($r('sys.float.Body_M'))
                 .fontColor($r('sys.color.font_primary'))
                 .placeholderColor($r('sys.color.font_secondary'))
                 .backgroundColor($r('sys.color.comp_background_tertiary'))
-                .onChange(() => {
+                .onChange((value: string) => {
+                  const config = this.toConfig();
+                  AIConfigStore.applyBaseUrl(config, value);
+                  this.apiKey = config.apiKey;
+                  this.baseUrl = value;
                   this.availableModels = [];
                 })
             }
@@ -206,6 +210,7 @@ struct ModelSettingsPage {
         const config = this.toConfig();
         AIConfigStore.applyProvider(config, value);
         this.provider = config.provider;
+        this.apiKey = config.apiKey;
         this.baseUrl = config.baseUrl;
         this.model = config.model;
         this.thinkingMode = config.thinkingMode;

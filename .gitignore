@@ -60,3 +60,6 @@ xcuserdata/
 
 # Local execution notes
 .superpowers/
+
+# Local development key embedded only in locally built apps
+/products/phone/src/main/resources/rawfile/ai_defaults.local.json

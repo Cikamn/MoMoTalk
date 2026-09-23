@@ -1,3 +1,4 @@
+import { util } from '@kit.ArkTS';
 import { PreferenceUtils } from 'lib_common';
 
 export const AI_CONFIG_CHANGED: string = 'ai_config_changed';
@@ -8,6 +9,11 @@ export const DEFAULT_ROLE_PROMPT: string =
 
 const CONFIG_FILE: string = 'ai_chat_config';
 const CONFIG_KEY: string = 'config';
+const LOCAL_DEFAULTS_FILE: string = 'ai_defaults.local.json';
+
+interface LocalAIDefaults {
+  apiKey: string;
+}
 
 export class AIConfig {
   provider: string = 'deepseek';
@@ -25,18 +31,25 @@ export class AIConfig {
 
 export class AIConfigStore {
   public static load(): AIConfig {
+    const defaults = AIConfigStore.loadLocalDefaults();
     const value = PreferenceUtils.getInstance(undefined, CONFIG_FILE).get(CONFIG_KEY, '');
     if (typeof value !== 'string' || value.length === 0) {
-      return new AIConfig();
+      return defaults;
     }
 
     try {
       const saved = JSON.parse(value) as AIConfig;
-      const config = new AIConfig();
-      config.provider = saved.provider || config.provider;
-      config.baseUrl = saved.baseUrl || config.baseUrl;
-      config.model = saved.model || config.model;
-      config.apiKey = saved.apiKey || '';
+      const config = defaults;
+      // Select the endpoint, model and credential together; never combine a
+      // bundled key with a partially saved custom endpoint.
+      if (typeof saved.apiKey === 'string' && saved.apiKey.trim() &&
+        typeof saved.baseUrl === 'string' && saved.baseUrl.trim() &&
+        typeof saved.model === 'string' && saved.model.trim()) {
+        config.provider = saved.provider || 'custom';
+        config.baseUrl = saved.baseUrl.trim().replace(/\/$/, '');
+        config.model = saved.model.trim();
+        config.apiKey = saved.apiKey.trim();
+      }
       config.temperature = AIConfigStore.clampTemperature(saved.temperature);
       config.maxTokens = AIConfigStore.clampMaxTokens(saved.maxTokens);
       config.thinkingMode = AIConfigStore.normalizeThinkingMode(saved.thinkingMode);
@@ -46,8 +59,24 @@ export class AIConfigStore {
       config.loreEnabled = saved.loreEnabled ?? config.loreEnabled;
       return config;
     } catch (_) {
-      return new AIConfig();
+      return defaults;
     }
+  }
+
+  private static loadLocalDefaults(): AIConfig {
+    const config = new AIConfig();
+    try {
+      const bytes = getContext().resourceManager.getRawFileContentSync(LOCAL_DEFAULTS_FILE);
+      const decoder = util.TextDecoder.create('utf-8', { ignoreBOM: true });
+      const local = JSON.parse(decoder.decodeToString(bytes, { stream: false })) as LocalAIDefaults;
+      if (local && typeof local.apiKey === 'string') {
+        config.apiKey = local.apiKey.trim();
+      }
+    } catch (_) {
+      // Public checkouts intentionally omit this local development resource.
+      // Never include credentials or resource contents in diagnostics.
+    }
+    return config;
   }
 
   public static save(config: AIConfig): void {
@@ -55,7 +84,19 @@ export class AIConfigStore {
     PreferenceUtils.getInstance(undefined, CONFIG_FILE).put(CONFIG_KEY, JSON.stringify(normalized));
   }
 
+  public static applyBaseUrl(config: AIConfig, baseUrl: string): void {
+    const previousUrl = config.baseUrl.trim().replace(/\/$/, '');
+    const nextUrl = baseUrl.trim().replace(/\/$/, '');
+    if (previousUrl !== nextUrl) {
+      config.apiKey = '';
+    }
+    config.baseUrl = baseUrl;
+  }
+
   public static applyProvider(config: AIConfig, provider: string): void {
+    if (config.provider !== provider) {
+      config.apiKey = '';
+    }
     config.provider = provider;
     if (provider === 'deepseek') {
       config.baseUrl = 'https://api.deepseek.com';
